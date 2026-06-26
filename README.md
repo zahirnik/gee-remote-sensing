@@ -1,9 +1,10 @@
 # Earth Engine Remote Sensing Portfolio
 
-A curated collection of **24 production-ready Google Earth Engine scripts**,
-organised into five application areas that together cover the major use
+A curated collection of **27 production-ready Google Earth Engine scripts**,
+organised into six application areas that together cover the major use
 cases of operational satellite remote sensing: surface water, floods,
-drought, fire & heat, and agriculture.
+drought, fire & heat, agriculture, and machine learning with foundation
+models.
 
 Every script is self-contained, fully documented, and ready to drop into
 the [GEE Code Editor](https://code.earthengine.google.com). The headers
@@ -13,10 +14,10 @@ numbered section comments walk the reader through each pipeline step.
 
 | | |
 |---|---|
-| **Scripts** | 24 polished `.js` files across 5 categories |
-| **Code** | 4,047 lines of GEE JavaScript |
-| **Datasets** | Landsat 5/7/8, Sentinel-1/2, MODIS, AVHRR, CHIRPS, GSMaP, PERSIANN, TRMM, SMAP, MERRA-2, GLDAS, ERA5-Land, FLDAS, JRC GSW, FIRMS, GHSL, FAO GAUL, USDA NASS CDL, HydroSHEDS |
-| **Techniques** | OTSU thresholding, Random Forest classification, SAR change detection, SPI, Mann-Kendall + Sen-slope, SUHI stratification, NDVI/EVI compositing, water-balance accounting, exposure-based damage assessment |
+| **Scripts** | 27 polished `.js` files across 6 categories |
+| **Code** | 4,836 lines of GEE JavaScript |
+| **Datasets** | Landsat 5/7/8, Sentinel-1/2, MODIS, AVHRR, CHIRPS, GSMaP, PERSIANN, TRMM, SMAP, MERRA-2, GLDAS, ERA5-Land, FLDAS, JRC GSW, FIRMS, GHSL, FAO GAUL, USDA NASS CDL, HydroSHEDS, **AlphaEarth Foundation Embeddings** |
+| **Techniques** | OTSU thresholding, Random Forest / Gradient-Boosted Trees classification, SAR change detection, SPI, Mann-Kendall + Sen-slope, SUHI stratification, NDVI/EVI compositing, water-balance accounting, exposure-based damage assessment, **foundation-model embeddings**, **few-shot classification** |
 
 ---
 
@@ -29,6 +30,7 @@ numbered section comments walk the reader through each pipeline step.
 | [03 — Drought, soil moisture & groundwater](#03--drought-soil-moisture--groundwater) | 5 | 933 |
 | [04 — Fire, heat & urban climate](#04--fire-heat--urban-climate) | 5 | 877 |
 | [05 — Agriculture, vegetation & land cover](#05--agriculture-vegetation--land-cover) | 5 | 745 |
+| [06 — Machine learning & foundation models](#06--machine-learning--foundation-models) | 3 | 789 |
 
 ---
 
@@ -214,6 +216,43 @@ comparable to USDA NASS yield forecasts.
 
 ---
 
+## 06 — Machine learning & foundation models
+
+![Sentinel-2 NDVI false-colour Murray River meanders, Gunbower / Torrumbarry, Australia](docs/figures/06_machine_learning.jpg)
+
+*Sentinel-2 NDVI false-colour composite of the Murray River meanders (Gunbower / Torrumbarry, Australia). The yellow blocks are irrigated cropland, red indicates dense vegetation, cyan is the river system — exactly the kind of multi-modal spectral signal a foundation model encodes per pixel. CC BY 2.0 Sentinel Hub / Copernicus.*
+
+### What this category does
+This is where the portfolio leaves classical remote sensing behind and steps
+into **foundation-model-driven Earth observation**. All three scripts use
+Google's **AlphaEarth Foundation Embeddings** (`GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL`)
+— a 64-dimensional per-pixel learned representation that distils years of
+multi-sensor observations into one compact, transferable feature vector —
+as the input to GEE's built-in machine-learning classifiers
+(`smileRandomForest`, `smileGradientTreeBoost`). Three flagship use cases
+are demonstrated: **crop-type mapping**, **drought-severity classification
+from multi-year embedding trajectories**, and **few-shot disaster
+flood-mapping** with as few as 12 labelled points.
+
+### Why it matters
+Foundation models are the biggest shift in Earth observation in a decade.
+They cut the amount of labelled data needed by an order of magnitude,
+transfer cleanly across regions, and make few-shot operational mapping
+(e.g. disaster response with no time to label data) genuinely tractable.
+Every script in this category was **smoke-tested end-to-end against a live
+Earth Engine project** — you can paste any of them into the Code Editor
+and click Run with no edits required.
+
+### Scripts → see [`06_machine_learning_foundation_models/`](06_machine_learning_foundation_models/)
+
+| Script | Foundation features | ML model | Application |
+|---|---|---|---|
+| `01_crop_type_alphaearth_random_forest.js` | AlphaEarth embedding for the target year (64 dims) | Random Forest (100 trees) | Corn / soy / wheat classification in Iowa using USDA CDL as labels — ~94 % validation accuracy on the smoke-test split |
+| `02_drought_severity_alphaearth_gbt.js` | AlphaEarth(T-1) + Δ(T-1 − T-3) — 128 dims | Gradient-Boosted Trees (200) | D0–D4 severity classification in California's Central Valley with CHIRPS-derived USDM-style percentile labels |
+| `03_flood_few_shot_alphaearth_embedding.js` | Δembedding (post-event − pre-event) | Prototype distance + few-shot Random Forest + Sentinel-1 SAR baseline | Few-shot flood mapping for Cyclone Idai, Mozambique 2019, with ~12 labelled points |
+
+---
+
 ## How to use a script
 
 1. Click into any category folder above.
@@ -261,6 +300,7 @@ public domain, sourced from Wikimedia Commons:
 | 03 Drought | "Historic drought precedes the 2021 wild fire season" | NASA Scientific Visualization Studio |
 | 04 Fire & heat | August 2020 California wildfires | NASA Terra (MODIS) |
 | 05 Agriculture | Landsat center-pivot irrigation | NASA / USGS, on USPS "Earthscapes" Forever Stamp 2012 |
+| 06 Machine learning & foundation models | Sentinel-2 NDVI false-colour of Murray River meanders (Gunbower / Torrumbarry, Australia) | Sentinel Hub / Copernicus, CC BY 2.0 |
 
 ---
 
