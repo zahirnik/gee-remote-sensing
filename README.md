@@ -38,7 +38,7 @@ Sobrino-style emissivity, 20-year monthly Surface Urban Heat Island
 points, and Random-Forest urban land-cover classification with SMW LST,
 spectral indices, and DEM as features.
 
-### [05 — Vegetation, land cover & agriculture](05_vegetation_land_cover/) — 5 scripts, 745 lines
+### [05 — Agriculture, Vegetation & Land Cover](05_agriculture_vegetation_land_cover/) — 5 scripts, 745 lines
 Supervised Random Forest land-cover classification on Landsat / Sentinel-2,
 multi-temporal NDVI compositing from harmonised Landsat 5/7/8, AVHRR/MODIS
 PET and ET, crop-type classification using USDA NASS CDL as labels, and

@@ -1,4 +1,4 @@
-# 05 - Vegetation, Land Cover and Agriculture
+# 05 - Agriculture, Vegetation & Land Cover
 
 Earth-Engine workflows for vegetation, land-cover and agricultural monitoring.
 The scripts combine supervised classification (Random Forest with confusion-matrix
