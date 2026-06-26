@@ -1,0 +1,10 @@
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# GEE Code Editor doesn't produce build artefacts, but keep these out
+# in case anyone clones into a working environment.
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
